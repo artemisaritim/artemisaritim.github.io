@@ -1,0 +1,84 @@
+<html><head>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1254">
+<title>GMTSuite Scada</title>
+<link rel="stylesheet" type="text/css" href="http://gmtcontrol.com/mmc/libs/ver1/scada_data/csslib/buttons.css">
+<link rel="stylesheet" type="text/css" href="http://gmtcontrol.com/mmc/libs/ver1/scada_data/csslib/edit.css">
+<link rel="stylesheet" type="text/css" href="http://gmtcontrol.com/mmc/libs/ver1/scada_data/csslib/gmt01.css">
+<link rel="stylesheet" type="text/css" href="http://gmtcontrol.com/mmc/libs/ver1/scada_data/csslib/nouislider.min.css">
+<link rel="stylesheet" type="text/css" href="http://gmtcontrol.com/mmc/libs/ver1/scada_data/font-awesome-4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="http://gmtcontrol.com/mmc/libs/ver1/scada_data/csslib/jquery-ui.min.css">
+<style>
+</style></head><body><mmcmenu><ul><li><label class="scadapagetitle">Sayfa162</label></li>
+<li class="dropdown">
+<a href="javascript:void(0)" class="dropbtn">Cihazlar<span id="cihazlarstatus" class=""></span></a>
+<div class="dropdown-content">
+<a href="index.html">Sayfa162</a>
+</div>
+</li>
+<li class="dropdown">
+<a href="javascript:void(0)" class="dropbtn">Sayfalar</a>
+<div class="dropdown-content">
+<a href="webpage_164.html">Sayfa165</a>
+</div>
+</li>
+<ikon>
+<ikonitem>Internet<br><div id="internet_status" class="fa fa-cloud fa-2x" style="color:red"></div></ikonitem>
+<ikonitem>Server<br><div id="server_status" class="fa fa-server fa-2x" style="color:red"></div></ikonitem>
+</ikon>
+</ul>
+</mmcmenu><div id="dialog-message" title="Demo süresi dolmuştur.." hidden><p>Kullandığınız CPU Modeli 496 serisinden düşük olduğu için WMI Scada özelliği demo süresi sona ermiştir.</p><p>Demo modu PLC'ye program yükledikten sonra (enerji gitmediği müddetçe) 1 saat süre ile çalışabilmektedir.</p><p>WMI Scada sistemi 496 serisi PLC'lerde çalışabilmektedir.</p></div><script src="http://gmtcontrol.com/mmc/libs/ver1/scada_data/jslib/jquery-3.2.1.min.js"></script><script src="http://gmtcontrol.com/mmc/libs/ver1/scada_data/jslib/paho-mqtt.js"></script><script src="http://gmtcontrol.com/mmc/libs/ver1/scada_data/jslib/cpuclass.js"></script><script src="http://gmtcontrol.com/mmc/libs/ver1/scada_data/jslib/gmt_engine01.js"></script><script src="http://gmtcontrol.com/mmc/libs/ver1/scada_data/jslib/gauge.min.js"></script><script src="http://gmtcontrol.com/mmc/libs/ver1/scada_data/jslib/jquery-ui.min.js"></script><script src="http://gmtcontrol.com/mmc/libs/ver1/scada_data/jslib/jquery.knob.min.js"></script><script src="http://gmtcontrol.com/mmc/libs/ver1/scada_data/jslib/nouislider.min.js"></script><script src="http://gmtcontrol.com/mmc/libs/ver1/scada_data/jslib/moment_min.js"></script><script src="http://gmtcontrol.com/mmc/libs/ver1/scada_data/jslib/Chart.min.js"></script><canvas id="myCanvas" width="800" height="600" style="z-index:1 border:2px solid #000000"></canvas>
+<script type="text/javascript">
+var c = document.getElementById("myCanvas");var ctx = c.getContext("2d");
+var InternetConnStatus=false;
+c.addEventListener('click', function(event) { var canvasrect = c.getBoundingClientRect();gmouseposx= event.clientX - canvasrect.left;gmouseposy= event.clientY - canvasrect.top;}, false);function loadvalues(){};c.addEventListener('mousemove', function(event) {var canvasrect = c.getBoundingClientRect();gmouseposx= event.clientX - canvasrect.left;gmouseposy= event.clientY - canvasrect.top;c.style.cursor = "default";}, false);function isInside(mouseposx,mouseposy,posx,posy,width,height){return ((mouseposx > (posx)) && (mouseposx < (posx+width)) && (mouseposy < (posy + height)) && (mouseposy > posy))  }var plc_adet=1;
+var cihazlar= new Array();
+cihazlar[0] = new cl_CPU("00_25_fc_00_a7_be", "1234");
+setInterval(PLCSpeedCalculation, 1000);
+var server_port=9883;
+var server_ip="server1.gmtcnt.org";
+cihazlar[0].defaultsendbuffer = "info 1234";function cl_fSystemOneSecond(){}initWebSocket();function demouyar(){$( function() {$( "#dialog-message" ).dialog({closeOnEscape: false,beforeClose: function (event, ui) { return false; },
+modal: true,});});}
+degtazele();
+function degtazele(){
+if (InternetConnStatus != navigator.onLine){InternetConnStatus=navigator.onLine;if (InternetConnStatus)document.getElementById("internet_status").style="color:lime";else document.getElementById("internet_status").style="color:red";}
+if (ServerTazele){if (ServerConnectionStatus)document.getElementById("server_status").style="color:lime";else document.getElementById("server_status").style="color:red";ServerTazele=false;}
+if (TumPLClerOK !=TumPLClerOK_esk){
+if (TumPLClerOK==0){document.getElementById("cihazlarstatus").className = "";	document.getElementById("cihazlarstatus").innerHTML  ="";}else{
+document.getElementById("cihazlarstatus").className = "badge red";document.getElementById("cihazlarstatus").innerHTML  =TumPLClerOK;}TumPLClerOK_esk=TumPLClerOK;}
+ctx.lineJoin="round";
+ctx.fillStyle="#e7e0bb";
+ctx.fillRect(0,0,800,600);
+if (cihazlar[0].online == 0)
+ctx.fillStyle="#e60000";
+ else
+ctx.fillStyle="#00e600";
+ctx.fillRect(266.2,100,200,150);
+ctx.lineWidth="1";
+ctx.strokeStyle="#000000";
+ctx.strokeRect(266.2,100,200,150);
+ctx.font='12px Verdana';
+var txt="PLC";
+ctx.textAlign="left";
+ctx.fillStyle="#000000";
+ctx.fillText(txt,271.2,120);
+var txt="Mac : 00:25:fc:00:a7:be";
+ctx.textAlign="left";
+ctx.fillStyle="#000000";
+ctx.fillText(txt,271.2,135);
+var txtdurum="Durum: Aktif";
+if (cihazlar[0].online == 0) {
+ txtdurum="Durum: Pasif";}
+ else
+ {txtdurum="Durum: Aktif";
+ctx.fillText(cihazlar[0].info[1],271.2,165);
+ctx.fillText(cihazlar[0].info[2],271.2,180);
+ctx.fillText(cihazlar[0].info[3],271.2,195);
+ctx.fillText(cihazlar[0].info[4],271.2,210);
+ctx.fillText(cihazlar[0].info[5],271.2,225);
+ctx.fillText("Haberleşme hızı:"+cihazlar[0].conSpeed +"paket/sn",271.2,240);
+ }
+ctx.textAlign="left";
+ctx.fillStyle="#000000";
+ctx.fillText(txtdurum,271.2,150);
+} </script>
+</body></html>
